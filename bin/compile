@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -e            # fail fast
+set -o pipefail   # don't ignore exit codes when piping output
+set -x          # enable debugging
+
+build_dir=$1
+cache_dir=$2
+env_dir=$3
+
+bp_dir=$(cd $(dirname $0); cd ..; pwd)
+
+# Load some convenience functions like status(), echo(), and indent()
+source $bp_dir/bin/common.sh
+
+mkdir -p $build_dir/vendor/sqslite/bin
+
+# Download sqslite
+status "Downloading and sqslite"
+sqslite_url="https://s3.amazonaws.com/sqslite-heroku/sqslite.tar.gz"
+curl $sqslite_url -s -o - | tar xzf - -C $build_dir
+
+chmod +x $build_dir/sqslite
+mv $build_dir/sqslite $build_dir/vendor/sqslite/bin/sqslite
+
+mkdir -p $build_dir/.profile.d
+echo 'PATH=$PATH:$HOME/vendor/sqslite/bin' > $build_dir/.profile.d/sqslite.sh
