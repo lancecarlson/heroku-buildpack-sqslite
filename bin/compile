@@ -17,7 +17,7 @@ mkdir -p $build_dir/vendor/sqslite/bin
 
 # Download sqslite
 status "Downloading and sqslite"
-sqslite_url="https://s3.amazonaws.com/sqslite-heroku/sqslite.tar.gz"
+sqslite_url="https://s3.amazonaws.com/heroku-sqslite/sqslite.tar.gz"
 curl $sqslite_url -s -o - | tar xzf - -C $build_dir
 
 chmod +x $build_dir/sqslite
